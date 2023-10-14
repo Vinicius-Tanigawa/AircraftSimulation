@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import queue
 
 from tkinter import ttk
+from performance import power_traction_velocity
 from motors import motors_data
 from constants import tolerance
 from simulation import simulate_takeoff
@@ -18,7 +19,8 @@ from plot import (plot_forces_per_distance, plot_fx_per_distance,
                   plot_distance_per_time, plot_acceleration_per_distance,
                   plot_velocity_per_distance)
 
-data_queue = queue.Queue()
+data_plot = queue.Queue()
+data_performance = queue.Queue()
 
 
 def start_simulation():
@@ -57,11 +59,15 @@ def start_simulation():
 
         elapsed_time = t.time() - start_time
 
-        data_queue.put((Fx_values, Fy_values, Fz_values, Tx_values, D_values, 
+        data_plot.put((Fx_values, Fy_values, Fz_values, Tx_values, D_values, 
                         Fat_values, Tz_values, W_values, N_values, L_values, 
                         x_values, V_values, a_values))
+        
+        data_performance.put((selected_motor, m))
 
         update_labels(m, a, Vs, Vt, x, Vto, K, elapsed_time)
+
+        return m
 
     simulation_thread = th.Thread(target=run_simulation, 
                                   args=(start_time, initial_Vt, initial_x, 
@@ -69,8 +75,16 @@ def start_simulation():
     simulation_thread.start()
 
 
+def display_performance():
+    data = data_performance.get()
+
+    power_traction_velocity(data[0], data[1])
+
+    plt.show()
+
+
 def display_plots():
-    data = data_queue.get()
+    data = data_plot.get()
 
     plot_forces_per_distance(data[10], data[0], data[1], data[2])
     plot_fx_per_distance(data[10], data[3], data[4], data[5])
@@ -111,6 +125,7 @@ def update_labels(m, a, Vs, Vt, x, Vto, K, elapsed_time):
     K_label.config(text=f"\nKinetc Energy: {K:.0f} J")
     time_label.config(text=f"\nTime Elapsed: {elapsed_time:.2f} s")
     show_plots_button.pack()
+    show_performance_button.pack()
     loading_label.config(text="")
 
 
@@ -156,6 +171,9 @@ if __name__ == "__main__":
 
     show_plots_button = ttk.Button(root, text="Show Plots", command=display_plots)
     show_plots_button.pack_forget()
+
+    show_performance_button = ttk.Button(root, text="Show Performance Plots", command=display_performance)
+    show_performance_button.pack_forget()
 
 
     root.mainloop()
