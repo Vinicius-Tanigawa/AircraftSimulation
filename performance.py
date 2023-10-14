@@ -3,6 +3,8 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+from constants import rho, e
+from aircraft import aircraft
 from force import calculate_forces
 
 def power_traction_velocity(motor_name, m):
@@ -15,15 +17,19 @@ def power_traction_velocity(motor_name, m):
     Vt_values = []
     x = 0
 
-    for Vt in np.arange(0, 17, 0.01):
+    for Vt in np.arange(5, 17, 0.01):
         Fx, Fy, Fz, Tx, Tz, L, D, W, N, Fat = calculate_forces(Vt, x, motor_name, m)
 
-        T_values.append(Tx)
-        Tr_values.append(D)
-        Te_values.append(Tx - D)
-        P_values.append(Tx * Vt)
-        Pr_values.append(D * Vt)
-        Pe_values.append((Tx * Vt) - (D * Vt))
+        k = (1 / 2) * rho * aircraft.S * (Vt ** 2)
+        CL = W / k
+        CD = ((CL ** 2) / (np.pi * e * aircraft.AR)) + aircraft.CD0
+
+        T_values.append(Tx * rho)
+        Tr_values.append(CD * k)
+        Te_values.append((Tx * rho) - (CD * k))
+        P_values.append(Tx * rho * Vt)
+        Pr_values.append(CD * k * Vt)
+        Pe_values.append((Tx * rho * Vt) - (CD * k * Vt))
         Vt_values.append(Vt)
 
     plt.figure(figsize=(8, 5))

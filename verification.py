@@ -16,7 +16,7 @@ def analytic_verification(m, motor_name):
 
     A = (T0 / m) - mu * g
 
-    B = (1 / m) * ((1/2) * rho * aircraft.S * (aircraft.CD - (mu * aircraft.CL0)) + a)
+    B = (1 / m) * ((1/2) * rho * aircraft.S * (aircraft.CD0 - (mu * aircraft.CL0)) + a)
 
     Vto = np.sqrt((A - (A / np.exp(2 * B * runway))) / B)
 
