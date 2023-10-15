@@ -17,7 +17,7 @@ def power_traction_velocity(motor_name, m):
     Vt_values = []
     x = 0
 
-    for Vt in np.arange(6, 16.01, 0.01):
+    for Vt in np.arange(5, 18.01, 0.01):
         Fx, Fy, Fz, Tx, Tz, L, D, W, N, Fat = calculate_forces(Vt, x, motor_name, m)
 
         k = (1 / 2) * rho * aircraft.S * (Vt ** 2)
