@@ -8,6 +8,7 @@ import queue
 
 from tkinter import ttk
 from performance import power_traction_velocity
+from aerodynamic import cl_cd
 from motors import motors_data
 from constants import tolerance
 from simulation import simulate_takeoff
@@ -21,6 +22,7 @@ from plot import (plot_forces_per_distance, plot_fx_per_distance,
 
 data_plot = queue.Queue()
 data_performance = queue.Queue()
+data_aerodynamic = queue.Queue()
 
 
 def start_simulation():
@@ -64,6 +66,7 @@ def start_simulation():
                         x_values, V_values, a_values))
         
         data_performance.put((selected_motor, m))
+        data_aerodynamic.put(m)
 
         update_labels(m, a, Vs, Vt, x, Vto, K, elapsed_time)
 
@@ -79,6 +82,14 @@ def display_performance():
     data = data_performance.get()
 
     power_traction_velocity(data[0], data[1])
+
+    plt.show()
+
+
+def display_aerodynamic():
+    data = data_aerodynamic.get()
+
+    cl_cd(data)
 
     plt.show()
 
@@ -126,13 +137,15 @@ def update_labels(m, a, Vs, Vt, x, Vto, K, elapsed_time):
     time_label.config(text=f"\nTime Elapsed: {elapsed_time:.2f} s")
     show_plots_button.pack()
     show_performance_button.pack()
+    show_aerodynamic_button.pack()
     loading_label.config(text="")
 
 
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("Takeoff Simulation")
-    root.geometry("539x333")
+    root.minsize(400, 300)
+    root.resizable(True, True)
 
     motor_label = ttk.Label(root, text="Select Motor:")
     motor_label.pack()
@@ -174,6 +187,9 @@ if __name__ == "__main__":
 
     show_performance_button = ttk.Button(root, text="Show Performance Plots", command=display_performance)
     show_performance_button.pack_forget()
+
+    show_aerodynamic_button = ttk.Button(root, text="Show Aerodynamic Plots", command=display_aerodynamic)
+    show_aerodynamic_button.pack_forget()
 
 
     root.mainloop()
