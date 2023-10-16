@@ -3,7 +3,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from constants import rho, e
+from constants import rho, e, g
 from aircraft import aircraft
 from force import calculate_forces
 
@@ -18,6 +18,8 @@ def power_traction_velocity(motor_name, m):
     x = 0
 
     for Vt in np.arange(5, 18.01, 0.01):
+        Vs = np.sqrt((m * g / (aircraft.CLmax * rho / 2 * aircraft.S)))
+
         Fx, Fy, Fz, Tx, Tz, L, D, W, N, Fat = calculate_forces(Vt, x, motor_name, m)
 
         k = (1 / 2) * rho * aircraft.S * (Vt ** 2)
@@ -36,6 +38,7 @@ def power_traction_velocity(motor_name, m):
     plt.plot(Vt_values, T_values, label="Available")
     plt.plot(Vt_values, Tr_values, label="Required")
     plt.plot(Vt_values, Te_values, label="Excess")
+    plt.axvline(x=Vs, color='r', linestyle='--')
     plt.xlabel("Velocity (m/s)")
     plt.ylabel("Traction (N)")
     plt.title("Velocity vs. Traction")
@@ -45,6 +48,7 @@ def power_traction_velocity(motor_name, m):
     plt.plot(Vt_values, P_values, label="Available")
     plt.plot(Vt_values, Pr_values, label="Required")
     plt.plot(Vt_values, Pe_values, label="Excess")
+    plt.axvline(x=Vs, color='r', linestyle='--')
     plt.xlabel("Velocity (m/s)")
     plt.ylabel("Power (W)")
     plt.title("Velocity vs. Power")
