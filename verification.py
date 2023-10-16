@@ -7,7 +7,7 @@ from constants import g, rho, runway, mu
 from motors import get_motor_thrust
 
 def analytic_verification(m, motor_name):
-    Vs = (m * g / (aircraft.CLmax * rho / 2 * aircraft.S)) ** 0.5
+    Vs = np.sqrt((m * g / (aircraft.CLmax * rho / 2 * aircraft.S)))
 
     T0 = get_motor_thrust(motor_name, 0)
     T = get_motor_thrust(motor_name, Vs)
