@@ -13,11 +13,11 @@ def calculate_forces(Vt, x, motor_name, m, rho=rho, S=aircraft.S, mu=mu):
     else:
         alpha = 0
     
-    L = (aircraft.CL0 + (aircraft.CLalpha * alpha)) * ((rho * (Vt ** 2)) / 2) * aircraft.S
+    L = (aircraft.CL0 + (aircraft.CL * alpha)) * ((rho * (Vt ** 2)) / 2) * aircraft.S
     T = np.array([get_motor_thrust(motor_name, Vt) * np.cos(alpha * (np.pi / 180)), 
                   0., 
                   get_motor_thrust(motor_name, Vt) * np.sin(alpha* (np.pi / 180))])
-    D = aircraft.CD0 * ((rho * (Vt ** 2)) / 2) * aircraft.S
+    D = (aircraft.CD0 + (aircraft.CD * alpha)) * ((rho * (Vt ** 2)) / 2) * aircraft.S
     W = m * g
     N = max(0, W - L)
     Fat = N * mu
