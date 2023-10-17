@@ -11,7 +11,7 @@ def cl_cd(m):
     CL_values = []
     alpha_values = []
 
-    for alpha in np.arange(-10, 10.01, 0.01):
+    for alpha in np.arange(-20, 20.01, 0.01):
         Vs = np.sqrt((m * g / (aircraft.CLmax * rho / 2 * aircraft.S)))
 
         k = (1 / 2) * rho * aircraft.S * (Vs ** 2)
