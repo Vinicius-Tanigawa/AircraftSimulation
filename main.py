@@ -121,6 +121,9 @@ def clear_labels():
 
 def running_labels():
     start_button.pack_forget()
+    show_performance_button.pack_forget()
+    show_aerodynamic_button.pack_forget()
+    show_plots_button.pack_forget()
     loading_label.config(text="Running simulation... Please wait.")
     root.update_idletasks()
 
@@ -144,7 +147,7 @@ def update_labels(m, a, Vs, Vt, x, Vto, K, elapsed_time):
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("Takeoff Simulation")
-    root.minsize(400, 300)
+    root.minsize(400, 500)
     root.resizable(True, True)
 
     motor_label = ttk.Label(root, text="Select Motor:")
