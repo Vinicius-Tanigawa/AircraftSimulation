@@ -9,33 +9,34 @@ from aircraft import aircraft
 def cl_cd(m):
     CD_values = []
     CL_values = []
-    Vt_values = []
     alpha_values = []
 
-    for Vt in np.arange(0.01, 20.01, 0.01):
-        k = (1 / 2) * rho * aircraft.S * (Vt ** 2)
+    for alpha in np.arange(-10, 10.01, 0.01):
+        Vs = np.sqrt((m * g / (aircraft.CLmax * rho / 2 * aircraft.S)))
+
+        k = (1 / 2) * rho * aircraft.S * (Vs ** 2)
         W = m * g
         
         CL = W / k
 
         CD = ((CL ** 2) / (np.pi * e * aircraft.AR)) + aircraft.CD0
 
-        CD_values.append(CD)
-        CL_values.append(CL)
-        Vt_values.append(Vt)
+        CD_values.append(CD * alpha)
+        CL_values.append(CL* alpha)
+        alpha_values.append(alpha)
 
     plt.figure(figsize=(8, 5))
-    plt.plot(Vt_values, CD_values, label="CD")
-    plt.xlabel("Velocity (m/s)")
+    plt.plot(alpha_values, CD_values, label="CD")
+    plt.xlabel("Alpha (º)")
     plt.ylabel("CD")
-    plt.title("Velocity vs. CD")
+    plt.title("Alpha vs. CD")
     plt.legend()
 
     plt.figure(figsize=(8, 5))
-    plt.plot(Vt_values, CL_values, label="CL")
-    plt.xlabel("Velocity (m/s)")
+    plt.plot(alpha_values, CL_values, label="CL")
+    plt.xlabel("Alpha (º)")
     plt.ylabel("CL")
-    plt.title("Velocity vs. CL")
+    plt.title("Alpha vs. CL")
     plt.legend()
 
     plt.figure(figsize=(8, 5))
