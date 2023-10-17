@@ -147,7 +147,7 @@ def update_labels(m, a, Vs, Vt, x, Vto, K, elapsed_time):
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("Takeoff Simulation")
-    root.minsize(400, 500)
+    root.minsize(539, 333)
     root.resizable(True, True)
 
     motor_label = ttk.Label(root, text="Select Motor:")
